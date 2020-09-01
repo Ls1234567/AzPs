@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_testvm2_shuxli_name": {
+            "defaultValue": "testvm2-shuxli",
+            "type": "String"
+        },
+        "disks_testvm2_shuxli_disk1_2d10ce4d538a4a78bbed9544b182b99f_externalid": {
+            "defaultValue": "/subscriptions/420f71ab-35f2-4550-9de6-7c8fab764b4d/resourceGroups/AZPSTEST/providers/Microsoft.Compute/disks/testvm2-shuxli_disk1_2d10ce4d538a4a78bbed9544b182b99f",
+            "type": "String"
+        },
+        "networkInterfaces_testvm2_shuxli_externalid": {
+            "defaultValue": "/subscriptions/420f71ab-35f2-4550-9de6-7c8fab764b4d/resourceGroups/AzPsTest/providers/Microsoft.Network/networkInterfaces/testvm2-shuxli",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "name": "[parameters('virtualMachines_testvm2_shuxli_name')]",
+            "location": "eastus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_testvm2_shuxli_name'), '_disk1_2d10ce4d538a4a78bbed9544b182b99f')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_testvm2_shuxli_disk1_2d10ce4d538a4a78bbed9544b182b99f_externalid')]"
+                        },
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_testvm2_shuxli_name')]",
+                    "adminUsername": "vmtest2-shuxli",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_testvm2_shuxli_externalid')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
